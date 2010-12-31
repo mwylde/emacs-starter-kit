@@ -6,6 +6,12 @@
 ;; tab width
 (setq-default tab-width 4)
 
+;; HAML and SASS modes
+(load "~/.emacs.d/mwylde/haml-mode/haml-mode.el")
+(load "~/.emacs.d/mwylde/sass-mode/sass-mode.el")
+(require 'haml-mode)
+(require 'sass-mode)
+
 ;; Coffee-script support
 (add-to-list 'load-path "~/.emacs.d/mwylde/coffee-mode")
 (require 'coffee-mode)
