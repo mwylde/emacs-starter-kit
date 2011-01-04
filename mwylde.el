@@ -24,6 +24,21 @@
 ;; Set color theme to twilight
 (color-theme-twilight)
 
+;; PeepOpen, but only for OS X
+(if (eq system-type 'darwin)
+  (load "~/.emacs.d/mwylde/peepopen.el")
+  (require 'peepopen)
+  (textmate-mode)
+  (setq ns-pop-up-frames nil))
+
+;; Smart tabs (see http://www.emacswiki.org/emacs/SmartTabs)
+;; Basically, use tabs for indentation, spaces for alignment
+;; (i.e., the holy grail)
+(load "~/.emacs.d/mwylde/smart-tabs.el")
+(require 'smarttabs)
+
+
+
 ;; Originally from stevey, adapted to support moving to a new directory.
 (defun rename-file-and-buffer (new-name)
   "Renames both current buffer and file it's visiting to NEW-NAME."
