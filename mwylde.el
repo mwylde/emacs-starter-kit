@@ -21,6 +21,10 @@
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
+;; JS2, instead of the built-in js-mode
+;;(autoload 'js2-mode "js2" nil t)
+;;(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
 ;; Set color theme to twilight
 (color-theme-twilight)
 
@@ -31,13 +35,42 @@
   (textmate-mode)
   (setq ns-pop-up-frames nil))
 
+(defun open (project) (interactive (list (read-directory-name "Peepopen for project: " "~/git/")))
+  (flet ((textmate-project-root () (file-truename project)))
+    (peepopen-goto-file-gui)))
+
+(global-set-key [(meta ?o)] 'open)
+
+;; Full ack
+;;(add-to-list 'load-path "~/.emacs.d/mwylde")
+(autoload 'ack-same "full-ack" nil t)
+(autoload 'ack "full-ack" nil t)
+;;(autoload 'ack-find-same-file "full-ack" nil t)
+(autoload 'ack-find-file "full-ack" nil t)
+
+
 ;; Smart tabs (see http://www.emacswiki.org/emacs/SmartTabs)
 ;; Basically, use tabs for indentation, spaces for alignment
 ;; (i.e., the holy grail)
 (load "~/.emacs.d/mwylde/smart-tabs.el")
 (require 'smarttabs)
+(defun smarttabs-enable ()
+  "Enables smart tabs"
+  (interactive)
+  (setq indent-tabs-mode t)
+  (smart-tabs-advice ruby-indent-line ruby-indent-level)
+  (setq ruby-indent-tabs-mode t))
 
+(defun smarttabs-disable ()
+  "Disabled smart tabs"
+  (interactive)
+  (setq indent-tabs-mode nil)
+  (setq ruby-indent-tabs-mode nil)
+  (setq ruby-indent-spaces-mode t)
+  (setq ruby-indent-level 2))
 
+(smart-tabs-advice js-indent-line js-expr-basic-offset)
+;;(setq js-indent-tabs-mode t)
 
 ;; Originally from stevey, adapted to support moving to a new directory.
 (defun rename-file-and-buffer (new-name)
