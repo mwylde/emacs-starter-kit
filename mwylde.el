@@ -4,7 +4,7 @@
 (global-set-key (kbd "s-s") 'sr-speedbar-toggle)
 
 ;; tab width
-(setq-default tab-width 4)
+(setq-default tab-width 2)
 
 ;; HAML and SASS modes
 (load "~/.emacs.d/mwylde/haml-mode/haml-mode.el")
@@ -28,12 +28,13 @@
 ;; Set color theme to twilight
 (color-theme-twilight)
 
+;; Set default transport for tramp mode to ssh
+(setq tramp-default-method "ssh")
+
 ;; PeepOpen, but only for OS X
-(if (eq system-type 'darwin)
-  (load "~/.emacs.d/mwylde/peepopen.el")
-  (require 'peepopen)
-  (textmate-mode)
-  (setq ns-pop-up-frames nil))
+(load "~/.emacs.d/mwylde/peepopen.el")
+(require 'peepopen)
+(setq ns-pop-up-frames nil)
 
 (defun open (project) (interactive (list (read-directory-name "Peepopen for project: " "~/git/")))
   (flet ((textmate-project-root () (file-truename project)))
@@ -52,25 +53,40 @@
 ;; Smart tabs (see http://www.emacswiki.org/emacs/SmartTabs)
 ;; Basically, use tabs for indentation, spaces for alignment
 ;; (i.e., the holy grail)
-(load "~/.emacs.d/mwylde/smart-tabs.el")
-(require 'smarttabs)
-(defun smarttabs-enable ()
-  "Enables smart tabs"
-  (interactive)
-  (setq indent-tabs-mode t)
-  (smart-tabs-advice ruby-indent-line ruby-indent-level)
-  (setq ruby-indent-tabs-mode t))
+;; (load "~/.emacs.d/mwylde/smart-tabs.el")
+;; (require 'smarttabs)
+;; (defun smarttabs-enable ()
+;;   "Enables smart tabs"
+;;   (interactive)
+;;   (setq indent-tabs-mode t)
+;;   (smart-tabs-advice ruby-indent-line ruby-indent-level)
+;;   (setq ruby-indent-tabs-mode t))
 
-(defun smarttabs-disable ()
-  "Disabled smart tabs"
-  (interactive)
-  (setq indent-tabs-mode nil)
-  (setq ruby-indent-tabs-mode nil)
-  (setq ruby-indent-spaces-mode t)
-  (setq ruby-indent-level 2))
+;; (defun smarttabs-disable ()
+;;   "Disabled smart tabs"
+;;   (interactive)
+;;   (setq indent-tabs-mode nil)
+;;   (setq ruby-indent-tabs-mode nil)
+;;   (setq ruby-indent-spaces-mode t)
+;;   (setq ruby-indent-level 2))
 
-(smart-tabs-advice js-indent-line js-expr-basic-offset)
+;; (smart-tabs-advice js-indent-line js-expr-basic-offset)
 ;;(setq js-indent-tabs-mode t)
+
+;; Automatic indentation of pasted code, ala TextMate
+(dolist (command '(yank yank-pop))
+  (eval `(defadvice ,command (after indent-region activate)
+           (and (not current-prefix-arg)
+                (member major-mode '(emacs-lisp-mode lisp-mode
+                                                     clojure-mode    scheme-mode
+                                                     haskell-mode    ruby-mode
+                                                     rspec-mode      python-mode
+                                                     c-mode          c++-mode
+                                                     objc-mode       latex-mode
+                                                     plain-tex-mode))
+                (let ((mark-even-if-inactive transient-mark-mode))
+                  (indent-region (region-beginning) (region-end) nil))))))
+
 
 ;; Originally from stevey, adapted to support moving to a new directory.
 (defun rename-file-and-buffer (new-name)
