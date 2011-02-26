@@ -1,3 +1,14 @@
+;; Adding stuff to path because shell path doesn't get loaded in OS X
+(setenv "PATH" (concat "/usr/texbin:/usr/local/bin:/Applications/Stata10/StataSE.app/Contents/MacOS:" (getenv "PATH")))
+
+;; LaTeX stuff
+(custom-set-variables
+ '(LaTeX-command "latex -synctex=1")
+ '(TeX-view-program-list (quote (("Skim" "/Applications/Skim.app/Contents/SharedSupport/displayline %n %o %b") ("Preview" "open -a Preview.app %o"))))
+ )
+(setq TeX-source-correlate-method 'synctex)
+(add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+
 ;; Speed-bar in frame
 (load "~/.emacs.d/mwylde/sr-speedbar.el")
 (require 'sr-speedbar)
@@ -5,6 +16,34 @@
 
 ;; tab width
 (setq-default tab-width 2)
+
+;;
+(setq-default python-indent 2)
+
+;; Erlang
+(setq load-path (cons  "/usr/local/lib/erlang/lib/tools-2.6.6.2/emacs/"
+                       load-path))
+(setq erlang-root-dir "/usr/local/lib/erlang")
+(setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
+(require 'erlang-start)
+
+;; commands to simplify setting marks and returning to them
+;; courtesy of http://www.masteringemacs.org/articles/2010/12/22/fixing-mark-commands-transient-mark-mode/
+(defun push-mark-no-activate ()
+  "Pushes `point' to `mark-ring' and does not activate the region
+Equivalent to \\[set-mark-command] when \\[transient-mark-mode] is disabled"
+  (interactive)
+  (push-mark (point) t nil)
+  (message "Pushed mark to ring"))
+(global-set-key (kbd "C-`") 'push-mark-no-activate)
+
+(defun jump-to-mark ()
+  "Jumps to the local mark, respecting the `mark-ring' order.
+This is the same as using \\[set-mark-command] with the prefix argument."
+  (interactive)
+  (set-mark-command 1))
+(global-set-key (kbd "M-`") 'jump-to-mark)
+
 
 ;; HAML and SASS modes
 (load "~/.emacs.d/mwylde/haml-mode/haml-mode.el")
@@ -22,8 +61,8 @@
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
 ;; JS2, instead of the built-in js-mode
-;;(autoload 'js2-mode "js2" nil t)
-;;(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;; (autoload 'js2-mode "js2" nil t)
+;; (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
 
 ;; Set color theme to twilight
 (color-theme-twilight)
@@ -116,3 +155,14 @@
       ;; Clear buffer-modified flag caused by set-visited-file-name
       (set-buffer-modified-p nil))
   (message "Renamed to %s." new-name)))
+
+;;; bind RET to py-newline-and-indent
+(add-hook 'python-mode-hook '(lambda () 
+                               (define-key python-mode-map "\C-m" 'newline-and-indent)))
+
+;; ESS: Emacs speaks statistics
+(load "~/.emacs.d/mwylde/ess/lisp/ess-site")
+(require 'ess-site)
+
+;; SML
+(load "~/.emacs.d/mwylde/sml-mode/sml-mode-startup.el")
