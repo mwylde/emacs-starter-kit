@@ -168,3 +168,16 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 ;; SML
 (load "~/.emacs.d/mwylde/sml-mode/sml-mode-startup.el")
+
+;; RSpec mode
+(require 'rspec-mode)
+
+;; Jabber
+(setq load-path (cons  "~/.emacs.d/mwylde/jabber" load-path))
+(require 'jabber)
+(setq jabber-account-list
+      '(("wyldeone@gmail.com" 
+         (:network-server . "talk.google.com")
+         (:connection-type . ssl))))
+;; get rid of the giant avatar icons in chat windows
+(setq jabber-chat-buffer-show-avatar nil)
