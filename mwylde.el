@@ -67,7 +67,12 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 ;; (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
 
 ;; Set color theme to twilight
-(color-theme-twilight)
+;;(color-theme-twilight)
+
+;; Solarized color scheme
+(add-to-list 'load-path "~/.emacs.d/mwylde/emacs-color-theme-solarized")
+(require 'color-theme-solarized)
+(color-theme-solarized-dark)
 
 ;; Set default transport for tramp mode to ssh
 (setq tramp-default-method "ssh")
