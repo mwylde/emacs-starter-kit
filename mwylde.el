@@ -1,5 +1,13 @@
 ;; Adding stuff to path because shell path doesn't get loaded in OS X
-(setenv "PATH" (concat "/usr/texbin:/usr/local/bin:/Applications/Stata10/StataSE.app/Contents/MacOS:" (getenv "PATH")))
+(setenv "PATH" (concat "/usr/texbin:/usr/local/bin:/Applications/Stata10/StataSE.app/Contents/MacOS:~/.rvm/bin:" (getenv "PATH")))
+
+;; Updated version of color-theme
+(setq dotfiles-dir (file-name-directory
+                    (or (buffer-file-name) load-file-name)))
+(setq user-specific-dir (concat dotfiles-dir user-login-name))
+(add-to-list 'load-path (concat user-specific-dir "/color-theme"))
+(require 'color-theme)
+
 
 ;; LaTeX stuff
 (custom-set-variables
@@ -186,3 +194,13 @@ This is the same as using \\[set-mark-command] with the prefix argument."
          (:connection-type . ssl))))
 ;; get rid of the giant avatar icons in chat windows
 (setq jabber-chat-buffer-show-avatar nil)
+
+;; Get rid of current-line highlighting
+(remove-hook 'coding-hook 'turn-on-hl-line-mode)
+
+;; Automatically reverts unmodifed buffers that have changed on the
+;; filesystem. Useful for working with git.
+(global-auto-revert-mode)
+
+;; Better c style
+(setq c-default-style "linux")
