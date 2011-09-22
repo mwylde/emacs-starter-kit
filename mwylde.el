@@ -186,3 +186,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
          (:connection-type . ssl))))
 ;; get rid of the giant avatar icons in chat windows
 (setq jabber-chat-buffer-show-avatar nil)
+
+(remove-hook 'coding-hook 'turn-on-hl-line-mode)
+(global-hl-line-mode 0)
+((hl-line-mode 0))
