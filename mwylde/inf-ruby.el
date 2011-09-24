@@ -37,17 +37,17 @@
 (defvar inf-ruby-default-implementation "ruby"
   "Which ruby implementation to use if none is specified.")
 
-;; (defvar inf-ruby-first-prompt-pattern "^irb(.*)[0-9:]+0> *"
+ (defvar inf-ruby-first-prompt-pattern "^irb(.*)[0-9:]+0> *"
+   "First prompt regex pattern of ruby interpreter.")
+
+;; (defvar inf-ruby-first-prompt-pattern "^ruby.*?[0-9:]+ > *"
 ;;   "First prompt regex pattern of ruby interpreter.")
 
-(defvar inf-ruby-first-prompt-pattern "^ruby.*?[0-9:]+ > *"
-  "First prompt regex pattern of ruby interpreter.")
+ (defvar inf-ruby-prompt-pattern "^\\(irb(.*)[0-9:]+[>*\"'] *\\)+"
+   "Prompt regex pattern of ruby interpreter.")
 
-;; (defvar inf-ruby-prompt-pattern "^\\(irb(.*)[0-9:]+[>*\"'] *\\)+"
+;; (defvar inf-ruby-prompt-pattern "^\\(ruby.*?[0-9:]+ [>*\"'] *\\)+"
 ;;   "Prompt regex pattern of ruby interpreter.")
-
-(defvar inf-ruby-prompt-pattern "^\\(ruby.*?[0-9:]+ [>*\"'] *\\)+"
-  "Prompt regex pattern of ruby interpreter.")
 
 (defvar inf-ruby-mode-hook nil
   "*Hook for customising inf-ruby mode.")
@@ -61,7 +61,7 @@
   "*Mode map for inf-ruby-mode")
 
 (defvar inf-ruby-implementations
-  '(("ruby"     . "irb1.9.2 --inf-ruby-mode -r irb/completion")
+  '(("ruby"     . "/Users/mwylde/.rvm/bin/default_irb --inf-ruby-mode -r irb/completion")
     ("jruby"    . "jruby -S irb -r irb/completion")
     ("rubinius" . "rbx -r irb/completion")
     ("yarv"     . "irb1.9 --inf-ruby-mode -r irb/completion")) ;; TODO: ironruby?

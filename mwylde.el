@@ -1,3 +1,6 @@
+;; Marmalade for non-GPL modes
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+
 ;; Adding stuff to path because shell path doesn't get loaded in OS X
 (setenv "PATH" (concat "/usr/texbin:/usr/local/bin:/Applications/Stata10/StataSE.app/Contents/MacOS:~/.rvm/bin:" (getenv "PATH")))
 
@@ -14,8 +17,21 @@
  '(LaTeX-command "latex -synctex=1")
  '(TeX-view-program-list (quote (("Skim" "/Applications/Skim.app/Contents/SharedSupport/displayline %n %o %b") ("Preview" "open -a Preview.app %o"))))
  )
+;; Use PDF mode by default
+(setq-default TeX-PDF-mode t)
+;; Make emacs aware of multi-file projects
+(setq-default TeX-master nil)
+
 (setq TeX-source-correlate-method 'synctex)
 (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+
+(require 'tex-site)
+(add-hook 'TeX-mode-hook
+          (lambda ()
+            (add-to-list 'TeX-output-view-style
+                         '("^pdf$" "."
+                           "/Applications/Skim.app/Contents/SharedSupport/displayline %n %o %b")))
+          )
 
 ;; Speed-bar in frame
 (load "~/.emacs.d/mwylde/sr-speedbar.el")
@@ -204,3 +220,28 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 ;; Better c style
 (setq c-default-style "linux")
+
+;; Gets rid of doubled lines in echo
+(defun echo-false-comint () (setq comint-process-echoes t))
+(add-hook 'comint-mode-hook 'echo-false-comint)
+
+;; Scala stuff
+;; (add-hook 'scala-mode-hook
+;;           '(lambda ()
+;;              (scala-mode-feature-electric-mode)
+;;              ))
+
+(require 'scala-mode)
+(add-to-list 'auto-mode-alist '("\\.scala$" . scala-mode))
+(add-to-list 'load-path (concat user-specific-dir "/ensime/src/main/elisp/"))
+(require 'ensime)
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+(add-hook 'scala-mode-hook
+          (lambda () (local-set-key (kbd "RET") 'reindent-then-newline-and-indent)))
+
+;; Java
+(add-hook 'java-mode-hook (lambda ()
+                            (setq c-basic-offset 2
+                                  tab-width 2)))
+(add-hook 'java-mode-hook
+          (lambda () (local-set-key (kbd "RET") 'reindent-then-newline-and-indent)))
