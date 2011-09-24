@@ -213,6 +213,8 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 ;; Get rid of current-line highlighting
 (remove-hook 'coding-hook 'turn-on-hl-line-mode)
+(global-hl-line-mode 0)
+((hl-line-mode 0))
 
 ;; Automatically reverts unmodifed buffers that have changed on the
 ;; filesystem. Useful for working with git.
@@ -245,3 +247,17 @@ This is the same as using \\[set-mark-command] with the prefix argument."
                                   tab-width 2)))
 (add-hook 'java-mode-hook
           (lambda () (local-set-key (kbd "RET") 'reindent-then-newline-and-indent)))
+
+;; Fix fly-make to use 1.9
+(if (file-exists-p "/Users/mwylde/.rvm/bin/ruby")
+    (setq flymake-ruby-command-name "/Users/mwylde/.rvm/bin/ruby")
+  (setq flymake-ruby-command-name "ruby"))
+
+(defun flymake-ruby-init ()
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                     'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    ;; Invoke ruby with '-c' to get syntax checking
+    (list flymake-ruby-command-name (list "-c" local-file))))
