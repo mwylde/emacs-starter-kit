@@ -112,14 +112,6 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 (global-set-key [(meta ?o)] 'open)
 
-;; Full ack
-;;(add-to-list 'load-path "~/.emacs.d/mwylde")
-(autoload 'ack-same "full-ack" nil t)
-(autoload 'ack "full-ack" nil t)
-;;(autoload 'ack-find-same-file "full-ack" nil t)
-(autoload 'ack-find-file "full-ack" nil t)
-
-
 ;; Smart tabs (see http://www.emacswiki.org/emacs/SmartTabs)
 ;; Basically, use tabs for indentation, spaces for alignment
 ;; (i.e., the holy grail)
@@ -214,7 +206,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 ;; Get rid of current-line highlighting
 (remove-hook 'coding-hook 'turn-on-hl-line-mode)
 (global-hl-line-mode 0)
-((hl-line-mode 0))
+;; ((hl-line-mode 0))
 
 ;; Automatically reverts unmodifed buffers that have changed on the
 ;; filesystem. Useful for working with git.
@@ -261,3 +253,26 @@ This is the same as using \\[set-mark-command] with the prefix argument."
                       (file-name-directory buffer-file-name))))
     ;; Invoke ruby with '-c' to get syntax checking
     (list flymake-ruby-command-name (list "-c" local-file))))
+
+
+;; Fixes for spelling
+(setq ispell-program-name "aspell")
+
+;; Work groups
+(require 'workgroups)
+(workgroups-mode 1)
+
+;; Ack mode
+(add-to-list 'load-path "/Users/mwylde/.emacs.d/mwylde/ack-and-a-half.el")
+(autoload 'ack-and-a-half-same "ack-and-a-half" nil t)
+(autoload 'ack-and-a-half "ack-and-a-half" nil t)
+(autoload 'ack-and-a-half-find-file-samee "ack-and-a-half" nil t)
+(autoload 'ack-and-a-half-find-file "ack-and-a-half" nil t)
+;; Create shorter aliases
+(defalias 'ack 'ack-and-a-half)
+(defalias 'ack-same 'ack-and-a-half-same)
+(defalias 'ack-find-file 'ack-and-a-half-find-file)
+(defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
+
+;; Show column number
+(setq column-number-mode t)
