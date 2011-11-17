@@ -227,7 +227,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 (require 'scala-mode)
 (add-to-list 'auto-mode-alist '("\\.scala$" . scala-mode))
-(add-to-list 'load-path (concat user-specific-dir "/ensime/src/main/elisp/"))
+(add-to-list 'load-path (concat user-specific-dir "/ensime/elisp/"))
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 (add-hook 'scala-mode-hook
