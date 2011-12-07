@@ -258,7 +258,7 @@
    (file-exists-p (concat root "/build/ivy.xml"))))
 
 (defun ensime-config-is-sbt-test (root)
-  (or (file-exists-p (concat root "/build.sbt" ))
+  (or (not (null (directory-files root nil "\\.sbt$")))
       (file-exists-p (concat root "/project/boot" ))
       (file-exists-p (concat root "/project/build.properties" ))))
 
@@ -266,18 +266,23 @@
   "Search up the directory tree starting at file-name
    for a suitable config file to load, return it's path. Return nil if
    no such file found."
+  ;;(ensime-config-find-file "~/projects/ensime/")
+  ;;(ensime-config-find-file "~/projects/ensime/src/main")
+  ;;(ensime-config-find-file "~/projects/ensime/src/main/scala")
+  ;;(ensime-config-find-file "~/projects/ensime/src/main/scala/")
+  ;;(ensime-config-find-file "~/projects/ensime/.ensime")
   (let* ((dir (file-name-directory file-name))
 	 (possible-path (concat dir ensime-config-file-name)))
-    (if (file-directory-p dir)
+    (when (and dir (file-directory-p dir))
 	(if (file-exists-p possible-path)
 	    possible-path
 	  (if (not (equal dir (directory-file-name dir)))
 	      (ensime-config-find-file (directory-file-name dir)))))))
 
-(defun ensime-config-find-and-load (&optional default-dir)
+(defun ensime-config-find-and-load (&optional force-dir)
   "Query the user for the path to a config file, then load it."
-  (let* ((hint (or default-dir buffer-file-name))
-	 (guess (if hint (ensime-config-find-file hint)))
+  (let* ((hint (or force-dir buffer-file-name default-directory))
+	 (guess (when hint (ensime-config-find-file hint)))
 	 (file (if ensime-prefer-noninteractive guess
 		 (read-file-name
 		  "ENSIME Project file: "

@@ -4,6 +4,8 @@
 ;; Adding stuff to path because shell path doesn't get loaded in OS X
 (setenv "PATH" (concat "/usr/texbin:/usr/local/bin:/Applications/Stata10/StataSE.app/Contents/MacOS:~/.rvm/bin:" (getenv "PATH")))
 
+(setq exec-path (append exec-path (list "/usr/local/bin" )))
+
 ;; Updated version of color-theme
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
@@ -228,6 +230,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 (require 'scala-mode)
 (add-to-list 'auto-mode-alist '("\\.scala$" . scala-mode))
 (add-to-list 'load-path (concat user-specific-dir "/ensime/elisp/"))
+(setenv "SBT_OPTS" "-XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256m -Xmx512M -Xss2M")
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 (add-hook 'scala-mode-hook
@@ -258,10 +261,6 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 ;; Fixes for spelling
 (setq ispell-program-name "aspell")
 
-;; Work groups
-(require 'workgroups)
-(workgroups-mode 1)
-
 ;; Ack mode
 (add-to-list 'load-path "/Users/mwylde/.emacs.d/mwylde/ack-and-a-half.el")
 (autoload 'ack-and-a-half-same "ack-and-a-half" nil t)
@@ -276,3 +275,9 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 ;; Show column number
 (setq column-number-mode t)
+
+;; Work groups
+(require 'workgroups)
+(workgroups-mode 1)
+(wg-load "/Users/mwylde/workgroups")
+
